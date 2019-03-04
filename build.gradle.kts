@@ -37,7 +37,6 @@ sourceSets["test"].resources.srcDirs("test/resources")
 publishing {
     repositories {
         maven {
-            // change to point to your repo, e.g. http://my.org/repo
             url = uri("$buildDir/repo")
         }
     }
