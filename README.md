@@ -1,5 +1,7 @@
 # Credentials
 
+![Build](https://img.shields.io/travis/camuthig/kotlin-credentials.svg?style=flat-square)
+
 This project creates the core logic to store confidential credentials colocated with the project the support in an
 encrypted formatted to avoid exposing these values.
 
