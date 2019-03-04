@@ -1,6 +1,6 @@
 # Credentials
 
-![Build](https://img.shields.io/travis/camuthig/kotlin-credentials.svg?style=flat-square)
+[![Build][ico-travisci]][link-travisci]
 
 This project creates the core logic to store confidential credentials colocated with the project the support in an
 encrypted formatted to avoid exposing these values.
@@ -57,3 +57,7 @@ this can be overridden using the following system properties
 If, for some reason, using the `ClassLoader` isn't the `FileCredentialsStore` can instead be used directly. This class
 is what powers the `ClassLoaderCredentialsStore`. It accepts `File` objects for the configuration file and key, and
 can be used in the same way as the `ClassLoaderCredentialsStore`.
+
+
+[ico-travisci]: https://img.shields.io/travis/camuthig/kotlin-credentials.svg?style=flat-square
+[link-travisci]: https://travis-ci.org/camuthig/kotlin-credentials
