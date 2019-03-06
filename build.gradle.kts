@@ -1,4 +1,5 @@
 import com.jfrog.bintray.gradle.BintrayExtension
+import org.camuthig.credentials.core.FileCredentialsStore
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -14,6 +15,17 @@ version = "0.1.0"
 repositories {
     mavenCentral()
     jcenter()
+}
+
+buildscript {
+    repositories {
+        maven {
+            url = uri("https://dl.bintray.com/camuthig/maven")
+        }
+    }
+    dependencies {
+        classpath("org.camuthig.credentials:core:0.1.0")
+    }
 }
 
 dependencies {
@@ -85,8 +97,8 @@ publishing {
 }
 
 bintray {
-    user = System.getProperty("bintray.user")
-    key = System.getProperty("bintray.key")
+    user = credentials("bintray.user")
+    key = credentials("bintray.key")
     publish = true
     setPublications("maven")
     pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
@@ -102,3 +114,26 @@ bintray {
     })
 }
 
+fun getStore(): FileCredentialsStore {
+    return FileCredentialsStore(File("publishing.conf.enc"), File("publishing.key"))
+}
+
+fun credentials(key: String): String = getStore().load().getString(key)
+
+tasks.register<DefaultTask>("credentialsGenerate") {
+    doLast {
+        getStore().generate()
+    }
+}
+
+tasks.register<DefaultTask>("credentialsUpsert") {
+    doLast {
+        getStore().upsert(System.getProperty("credentials.key"), System.getProperty("credentials.value"))
+    }
+}
+
+tasks.register<DefaultTask>("credentialsDelete") {
+    doLast {
+        getStore().delete(System.getProperty("credentials.key"))
+    }
+}
