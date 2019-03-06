@@ -1,5 +1,6 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.camuthig.credentials.core.FileCredentialsStore
+import org.camuthig.credentials.core.KeyFileMissing
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -118,7 +119,15 @@ fun getStore(): FileCredentialsStore {
     return FileCredentialsStore(File("publishing.conf.enc"), File("publishing.key"))
 }
 
-fun credentials(key: String): String = getStore().load().getString(key)
+fun credentials(key: String): String {
+    return try {
+        getStore().load().getString(key)
+    } catch (e: KeyFileMissing) {
+        // These values are only necessary for publishing, so we can ignore them if, for example, we are just running
+        // the test suite
+        ""
+    }
+}
 
 tasks.register<DefaultTask>("credentialsGenerate") {
     doLast {
